@@ -24,20 +24,7 @@ class DialogTurn:
     user_query: UserQuery
     assistant_response: AssistantResponse
 
-def get_embedder() -> adal.Embedder:
-    embedder_config = configs["embedder"]
-
-    # --- Initialize Embedder ---
-    model_client_class = embedder_config["model_client"]
-    if "initialize_kwargs" in embedder_config:
-        model_client = model_client_class(**embedder_config["initialize_kwargs"])
-    else:
-        model_client = model_client_class()
-    embedder = adal.Embedder(
-        model_client=model_client,
-        model_kwargs=embedder_config["model_kwargs"],
-    )
-    return embedder
+# get_embedder function moved to deepwiki.tools.embedder
 
 
 class CustomConversation:
@@ -467,26 +454,51 @@ IMPORTANT FORMATTING RULES:
                 logger.error(f"Sample embedding sizes: {', '.join(sizes)}")
             raise
 
-    def call(self, query: str, language: str = "en") -> Tuple[List]:
+    def call(self, query: str, language: str = "en") -> Tuple[RAGAnswer, List]:
         """
         Process a query using RAG.
 
         Args:
             query: The user's query
+            language: Language for the response
 
         Returns:
             Tuple of (RAGAnswer, retrieved_documents)
         """
         try:
-            retrieved_documents = self.retriever(query)
+            # Retrieve relevant documents
+            retrieved_result = self.retriever(query)
 
-            # Fill in the documents
-            retrieved_documents[0].documents = [
-                self.transformed_docs[doc_index]
-                for doc_index in retrieved_documents[0].doc_indices
-            ]
+            # Extract documents from retrieval result
+            retrieved_documents = []
+            if retrieved_result and len(retrieved_result) > 0:
+                retrieval_data = retrieved_result[0]
+                if hasattr(retrieval_data, 'doc_indices'):
+                    retrieved_documents = [
+                        self.transformed_docs[doc_index]
+                        for doc_index in retrieval_data.doc_indices
+                    ]
+                elif hasattr(retrieval_data, 'documents'):
+                    retrieved_documents = retrieval_data.documents
 
-            return retrieved_documents
+            logger.info(f"Retrieved {len(retrieved_documents)} documents for query")
+
+            # Generate response using the generator
+            response = self.generator(
+                input_str=query,
+                contexts=retrieved_documents,
+                conversation_history=self.memory()
+            )
+
+            # Add to conversation history
+            if isinstance(response, RAGAnswer):
+                self.memory.add_dialog_turn(query, response.answer)
+                return response, retrieved_documents
+            else:
+                # Fallback if response is not RAGAnswer
+                answer_text = str(response)
+                self.memory.add_dialog_turn(query, answer_text)
+                return RAGAnswer(answer=answer_text), retrieved_documents
 
         except Exception as e:
             logger.error(f"Error in RAG call: {str(e)}")
@@ -494,6 +506,6 @@ IMPORTANT FORMATTING RULES:
             # Create error response
             error_response = RAGAnswer(
                 rationale="Error occurred while processing the query.",
-                answer=f"I apologize, but I encountered an error while processing your question. Please try again or rephrase your question."
+                answer=f"I apologize, but I encountered an error while processing your question: {str(e)}"
             )
             return error_response, []

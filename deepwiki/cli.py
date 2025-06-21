@@ -6,12 +6,12 @@ This is the main entry point for the DeepWiki application, providing a CLI
 for building knowledge bases from code repositories and querying them.
 
 Usage:
-    python main.py <repo_url> [options]
+    deepwiki <repo_url> [options]
     
 Examples:
-    python main.py https://github.com/owner/repo --build
-    python main.py https://github.com/owner/repo
-    python main.py /path/to/local/repo --build --provider=openai
+    deepwiki https://github.com/owner/repo --build
+    deepwiki https://github.com/owner/repo
+    deepwiki /path/to/local/repo --build --provider=openai
 """
 
 import argparse

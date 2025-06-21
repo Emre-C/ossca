@@ -13,6 +13,8 @@ from adalflow.core.db import LocalDB
 from deepwiki.config import configs, DEFAULT_EXCLUDED_DIRS, DEFAULT_EXCLUDED_FILES
 from deepwiki.ollama_patch import OllamaDocumentProcessor
 from urllib.parse import urlparse, urlunparse
+from .database_versioning import save_state_with_version, load_state_with_version, check_database_version
+from .exceptions import SchemaMismatchError
 
 from deepwiki.tools.embedder import get_embedder
 
@@ -405,7 +407,8 @@ def transform_documents_and_save_to_db(
     db.load(documents)
     db.transform(key="split_and_embed")
     os.makedirs(os.path.dirname(db_path), exist_ok=True)
-    db.save_state(filepath=db_path)
+    # Use versioned save instead of direct pickle save
+    save_state_with_version(db, db_path)
     return db
 
 # NOTE: Individual file content fetching functions have been removed as they are
@@ -538,11 +541,16 @@ class DatabaseManager:
         if self.repo_paths and os.path.exists(self.repo_paths["save_db_file"]):
             logger.info("Loading existing database...")
             try:
-                self.db = LocalDB.load_state(self.repo_paths["save_db_file"])
+                # Use versioned load with schema checking
+                self.db = load_state_with_version(self.repo_paths["save_db_file"])
                 documents = self.db.get_transformed_data(key="split_and_embed")
                 if documents:
                     logger.info(f"Loaded {len(documents)} documents from existing database")
                     return documents
+            except SchemaMismatchError as e:
+                logger.warning(f"Database schema mismatch: {e}")
+                logger.info("Database will be rebuilt due to schema version mismatch")
+                # Continue to create a new database
             except Exception as e:
                 logger.error(f"Error loading existing database: {e}")
                 # Continue to create a new database

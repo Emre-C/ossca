@@ -6,25 +6,33 @@ DeepWiki is a powerful tool that creates queryable knowledge bases from code rep
 
 - 🔍 **Repository Analysis**: Process GitHub, GitLab, Bitbucket repositories or local directories
 - 🧠 **AI-Powered Q&A**: Ask questions about code in natural language
+- ⚡ **Streaming Responses**: Real-time streaming answers as they're generated
 - 💾 **Persistent Knowledge Base**: Build once, query multiple times
 - 🎯 **Smart Filtering**: Include/exclude specific files and directories
 - 🌐 **Multi-Provider Support**: Google, OpenAI, OpenRouter, Ollama, Bedrock, Azure
 - 💬 **Interactive Chat**: Conversation-aware responses with history
+- 🔄 **Schema Versioning**: Automatic database version management
 
 ## Installation
 
-1. Clone the repository:
+Install directly from PyPI:
+
+```bash
+pip install deepwiki
+```
+
+Or install from source:
+
 ```bash
 git clone https://github.com/your-org/deepwiki.git
 cd deepwiki
-```
-
-2. Install dependencies:
-```bash
 pip install -e .
 ```
 
-3. Set up your AI provider API keys (choose one):
+## Configuration
+
+Set up your AI provider API keys (choose one):
+
 ```bash
 # For Google (default)
 export GOOGLE_API_KEY="your-api-key"
@@ -52,13 +60,13 @@ export AWS_REGION="your-region"
 Build a knowledge base from a GitHub repository and start asking questions:
 
 ```bash
-python main.py https://github.com/owner/repo --build
+deepwiki https://github.com/owner/repo --build
 ```
 
 Load an existing knowledge base (if already built):
 
 ```bash
-python main.py https://github.com/owner/repo
+deepwiki https://github.com/owner/repo
 ```
 
 ### Local Repository
@@ -66,7 +74,7 @@ python main.py https://github.com/owner/repo
 Process a local repository:
 
 ```bash
-python main.py /path/to/local/repo --build
+deepwiki /path/to/local/repo --build
 ```
 
 ### Custom AI Provider
@@ -74,18 +82,26 @@ python main.py /path/to/local/repo --build
 Use OpenAI instead of Google:
 
 ```bash
-python main.py https://github.com/owner/repo --provider=openai --build
+deepwiki https://github.com/owner/repo --provider=openai --build
+```
+
+### Streaming Control
+
+Disable streaming for scripting scenarios:
+
+```bash
+deepwiki https://github.com/owner/repo --no-stream
 ```
 
 ## Command Line Options
 
 ```
-usage: main.py [-h] [--build] [--force-rebuild] [--provider {google,openai,openrouter,ollama,bedrock,azure}]
-               [--model MODEL] [--type {github,gitlab,bitbucket,local}] [--access-token ACCESS_TOKEN]
-               [--excluded-dirs [EXCLUDED_DIRS ...]] [--excluded-files [EXCLUDED_FILES ...]]
-               [--included-dirs [INCLUDED_DIRS ...]] [--included-files [INCLUDED_FILES ...]]
-               [--verbose] [--quiet]
-               repo_url
+usage: deepwiki [-h] [--build] [--force-rebuild] [--provider {google,openai,openrouter,ollama,bedrock,azure}]
+                [--model MODEL] [--type {github,gitlab,bitbucket,local}] [--access-token ACCESS_TOKEN]
+                [--excluded-dirs [EXCLUDED_DIRS ...]] [--excluded-files [EXCLUDED_FILES ...]]
+                [--included-dirs [INCLUDED_DIRS ...]] [--included-files [INCLUDED_FILES ...]]
+                [--verbose] [--quiet] [--no-stream]
+                repo_url
 
 positional arguments:
   repo_url              Repository URL (GitHub, GitLab, Bitbucket) or local path
@@ -111,6 +127,7 @@ optional arguments:
                         File patterns to include exclusively
   --verbose, -v         Enable verbose logging
   --quiet, -q           Suppress most output
+  --no-stream           Disable streaming output (for scripting scenarios)
 ```
 
 ## Usage Examples
@@ -118,7 +135,7 @@ optional arguments:
 ### Private Repository
 
 ```bash
-python main.py https://github.com/owner/private-repo --access-token=your-token --build
+deepwiki https://github.com/owner/private-repo --access-token=your-token --build
 ```
 
 ### Filter Specific Directories
@@ -126,13 +143,13 @@ python main.py https://github.com/owner/private-repo --access-token=your-token -
 Only process certain directories:
 
 ```bash
-python main.py https://github.com/owner/repo --included-dirs src tests --build
+deepwiki https://github.com/owner/repo --included-dirs src tests --build
 ```
 
 Exclude certain directories:
 
 ```bash
-python main.py https://github.com/owner/repo --excluded-dirs node_modules dist build --build
+deepwiki https://github.com/owner/repo --excluded-dirs node_modules dist build --build
 ```
 
 ### Custom File Filtering
@@ -140,25 +157,25 @@ python main.py https://github.com/owner/repo --excluded-dirs node_modules dist b
 Include only Python files:
 
 ```bash
-python main.py https://github.com/owner/repo --included-files "*.py" --build
+deepwiki https://github.com/owner/repo --included-files "*.py" --build
 ```
 
 Exclude log and temporary files:
 
 ```bash
-python main.py https://github.com/owner/repo --excluded-files "*.log" "*.tmp" --build
+deepwiki https://github.com/owner/repo --excluded-files "*.log" "*.tmp" --build
 ```
 
 ### GitLab Repository
 
 ```bash
-python main.py https://gitlab.com/owner/repo --type=gitlab --build
+deepwiki https://gitlab.com/owner/repo --type=gitlab --build
 ```
 
 ### Ollama (Local AI)
 
 ```bash
-python main.py https://github.com/owner/repo --provider=ollama --build
+deepwiki https://github.com/owner/repo --provider=ollama --build
 ```
 
 ## Interactive Commands

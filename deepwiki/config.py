@@ -1,16 +1,14 @@
 import os
-import json
 import logging
 import re
-from pathlib import Path
 from typing import List, Union, Dict, Any
 
 logger = logging.getLogger(__name__)
 
-from deepwiki.openai_client import OpenAIClient
-from deepwiki.openrouter_client import OpenRouterClient
-from deepwiki.bedrock_client import BedrockClient
-from deepwiki.azureai_client import AzureAIClient
+from deepwiki.providers.openai_client import OpenAIClient
+from deepwiki.providers.openrouter_client import OpenRouterClient
+from deepwiki.providers.bedrock_client import BedrockClient
+from deepwiki.providers.azureai_client import AzureAIClient
 from adalflow import GoogleGenAIClient, OllamaClient
 
 # Get API keys from environment variables
@@ -38,9 +36,6 @@ if AWS_REGION:
 if AWS_ROLE_ARN:
     os.environ["AWS_ROLE_ARN"] = AWS_ROLE_ARN
 
-# Get configuration directory from environment variable, or use default if not set
-CONFIG_DIR = os.environ.get('DEEPWIKI_CONFIG_DIR', None)
-
 # Client class mapping
 CLIENT_CLASSES = {
     "GoogleGenAIClient": GoogleGenAIClient,
@@ -49,6 +44,89 @@ CLIENT_CLASSES = {
     "OllamaClient": OllamaClient,
     "BedrockClient": BedrockClient,
     "AzureAIClient": AzureAIClient
+}
+
+# Configuration data (previously in JSON files)
+GENERATOR_CONFIG = {
+    "default_provider": "google",
+    "providers": {
+        "google": {
+            "model": "gemini-1.5-flash",
+            "temperature": 0.7,
+            "top_p": 0.9
+        },
+        "openai": {
+            "model": "gpt-4o-mini",
+            "temperature": 0.7,
+            "top_p": 0.9
+        },
+        "openrouter": {
+            "model": "meta-llama/llama-3.1-8b-instruct:free",
+            "temperature": 0.7,
+            "top_p": 0.9
+        },
+        "ollama": {
+            "model": "llama3.2",
+            "temperature": 0.7,
+            "top_p": 0.9
+        },
+        "bedrock": {
+            "model": "anthropic.claude-3-haiku-20240307-v1:0",
+            "temperature": 0.7,
+            "top_p": 0.9
+        },
+        "azure": {
+            "model": "gpt-4o-mini",
+            "temperature": 0.7,
+            "top_p": 0.9
+        }
+    }
+}
+
+EMBEDDER_CONFIG = {
+    "embedder": {
+        "embedding_model": "text-embedding-3-small",
+        "embedding_provider": "openai",
+        "embedding_dimensions": 1536,
+        "client_class": "OpenAIClient"
+    },
+    "text_splitter": {
+        "chunk_size": 1024,
+        "chunk_overlap": 40,
+        "split_by": "passage"
+    },
+    "retriever": {
+        "top_k": 5,
+        "similarity_threshold": 0.5
+    }
+}
+
+REPO_CONFIG = {
+    "file_filters": {
+        "excluded_dirs": [
+            ".git",
+            "__pycache__",
+            ".pytest_cache", 
+            "node_modules",
+            ".venv",
+            "venv",
+            "env",
+            ".env",
+            "dist",
+            "build"
+        ],
+        "excluded_files": [
+            "*.pyc",
+            "*.pyo",
+            "*.log",
+            "*.tmp",
+            "*.cache",
+            ".DS_Store",
+            "Thumbs.db"
+        ]
+    },
+    "max_file_size_mb": 10,
+    "max_repo_size_mb": 1000
 }
 
 def replace_env_placeholders(config: Union[Dict[str, Any], List[Any], str, Any]) -> Union[Dict[str, Any], List[Any], str, Any]:
@@ -81,59 +159,32 @@ def replace_env_placeholders(config: Union[Dict[str, Any], List[Any], str, Any])
         # Handles numbers, booleans, None, etc.
         return config
 
-# Load JSON configuration file
-def load_json_config(filename):
-    try:
-        # If environment variable is set, use the directory specified by it
-        if CONFIG_DIR:
-            config_path = Path(CONFIG_DIR) / filename
-        else:
-            # Otherwise use default directory
-            config_path = Path(__file__).parent / "config" / filename
-
-        logger.info(f"Loading configuration from {config_path}")
-
-        if not config_path.exists():
-            logger.warning(f"Configuration file {config_path} does not exist")
-            return {}
-
-        with open(config_path, 'r') as f:
-            config = json.load(f)
-            config = replace_env_placeholders(config)
-            return config
-    except Exception as e:
-        logger.error(f"Error loading configuration file {filename}: {str(e)}")
-        return {}
-
 # Load generator model configuration
 def load_generator_config():
-    generator_config = load_json_config("generator.json")
+    generator_config = replace_env_placeholders(GENERATOR_CONFIG.copy())
 
     # Add client classes to each provider
     if "providers" in generator_config:
         for provider_id, provider_config in generator_config["providers"].items():
-            # Try to set client class from client_class
-            if provider_config.get("client_class") in CLIENT_CLASSES:
-                provider_config["model_client"] = CLIENT_CLASSES[provider_config["client_class"]]
-            # Fall back to default mapping based on provider_id
-            elif provider_id in ["google", "openai", "openrouter", "ollama", "bedrock", "azure"]:
-                default_map = {
-                    "google": GoogleGenAIClient,
-                    "openai": OpenAIClient,
-                    "openrouter": OpenRouterClient,
-                    "ollama": OllamaClient,
-                    "bedrock": BedrockClient,
-                    "azure": AzureAIClient
-                }
+            # Map provider_id to client class
+            default_map = {
+                "google": GoogleGenAIClient,
+                "openai": OpenAIClient,
+                "openrouter": OpenRouterClient,
+                "ollama": OllamaClient,
+                "bedrock": BedrockClient,
+                "azure": AzureAIClient
+            }
+            if provider_id in default_map:
                 provider_config["model_client"] = default_map[provider_id]
             else:
-                logger.warning(f"Unknown provider or client class: {provider_id}")
+                logger.warning(f"Unknown provider: {provider_id}")
 
     return generator_config
 
 # Load embedder configuration
 def load_embedder_config():
-    embedder_config = load_json_config("embedder.json")
+    embedder_config = replace_env_placeholders(EMBEDDER_CONFIG.copy())
 
     # Process client classes
     for key in ["embedder", "embedder_ollama"]:
@@ -175,7 +226,7 @@ def is_ollama_embedder():
 
 # Load repository and file filters configuration
 def load_repo_config():
-    return load_json_config("repo.json")
+    return replace_env_placeholders(REPO_CONFIG.copy())
 
 # Default excluded directories and files
 DEFAULT_EXCLUDED_DIRS: List[str] = [
@@ -269,17 +320,12 @@ def get_model_config(provider="google", model=None):
 
     # If model not provided, use default model for the provider
     if not model:
-        model = provider_config.get("default_model")
+        model = provider_config.get("model")
         if not model:
-            raise ValueError(f"No default model specified for provider '{provider}'")
+            raise ValueError(f"No model specified for provider '{provider}'")
 
-    # Get model parameters (if present)
-    model_params = {}
-    if model in provider_config.get("models", {}):
-        model_params = provider_config["models"][model]
-    else:
-        default_model = provider_config.get("default_model")
-        model_params = provider_config["models"][default_model]
+    # Get model parameters
+    model_params = {k: v for k, v in provider_config.items() if k not in ["model_client", "model"]}
 
     # Prepare base configuration
     result = {
@@ -289,10 +335,7 @@ def get_model_config(provider="google", model=None):
     # Provider-specific adjustments
     if provider == "ollama":
         # Ollama uses a slightly different parameter structure
-        if "options" in model_params:
-            result["model_kwargs"] = {"model": model, **model_params["options"]}
-        else:
-            result["model_kwargs"] = {"model": model}
+        result["model_kwargs"] = {"model": model, **model_params}
     else:
         # Standard structure for other providers
         result["model_kwargs"] = {"model": model, **model_params}

@@ -509,3 +509,105 @@ IMPORTANT FORMATTING RULES:
                 answer=f"I apologize, but I encountered an error while processing your question: {str(e)}"
             )
             return error_response, []
+
+    def call_stream(self, query: str, language: str = "en"):
+        """
+        Process a query using RAG with streaming response.
+
+        Args:
+            query: The user's query
+            language: Language for the response
+
+        Yields:
+            Response chunks as they are generated
+        """
+        try:
+            # Retrieve relevant documents
+            retrieved_result = self.retriever(query)
+
+            # Extract documents from retrieval result
+            retrieved_documents = []
+            if retrieved_result and len(retrieved_result) > 0:
+                retrieval_data = retrieved_result[0]
+                if hasattr(retrieval_data, 'doc_indices'):
+                    retrieved_documents = [
+                        self.transformed_docs[doc_index]
+                        for doc_index in retrieval_data.doc_indices
+                    ]
+                elif hasattr(retrieval_data, 'documents'):
+                    retrieved_documents = retrieval_data.documents
+
+            logger.info(f"Retrieved {len(retrieved_documents)} documents for query")
+
+            # Create a streaming generator by manually handling the model call
+            try:
+                # Prepare the template with context
+                template_kwargs = {
+                    "output_format_str": self.generator.prompt_kwargs["output_format_str"],
+                    "conversation_history": self.memory(),
+                    "system_prompt": self.generator.prompt_kwargs["system_prompt"],
+                    "contexts": retrieved_documents,
+                    "input_str": query
+                }
+                
+                # Format the prompt
+                formatted_prompt = self.generator.template(**template_kwargs)
+                
+                # Get the model client and try streaming
+                model_client = self.generator.model_client
+                model_kwargs = self.generator.model_kwargs.copy()
+                model_kwargs["stream"] = True
+                
+                # Make streaming call
+                response_chunks = model_client.call(
+                    messages=[{"role": "user", "content": formatted_prompt}],
+                    **model_kwargs
+                )
+                
+                # Yield chunks if streaming is supported
+                if hasattr(response_chunks, '__iter__'):
+                    full_response = ""
+                    for chunk in response_chunks:
+                        content = ""
+                        if hasattr(chunk, 'choices') and chunk.choices:
+                            if hasattr(chunk.choices[0], 'delta') and hasattr(chunk.choices[0].delta, 'content'):
+                                content = chunk.choices[0].delta.content or ""
+                            elif hasattr(chunk.choices[0], 'message') and hasattr(chunk.choices[0].message, 'content'):
+                                content = chunk.choices[0].message.content or ""
+                        elif hasattr(chunk, 'content'):
+                            content = chunk.content or ""
+                        elif isinstance(chunk, str):
+                            content = chunk
+                        
+                        if content:
+                            full_response += content
+                            yield content
+                    
+                    # Add to conversation history after streaming is complete
+                    self.memory.add_dialog_turn(query, full_response)
+                    return
+                    
+            except Exception as stream_error:
+                logger.warning(f"Streaming failed: {stream_error}, falling back to regular generation")
+            
+            # Fallback to regular generation if streaming fails
+            response = self.generator(
+                input_str=query,
+                contexts=retrieved_documents,
+                conversation_history=self.memory()
+            )
+
+            # Add to conversation history
+            if isinstance(response, RAGAnswer):
+                self.memory.add_dialog_turn(query, response.answer)
+                yield response.answer
+            else:
+                # Fallback if response is not RAGAnswer
+                answer_text = str(response)
+                self.memory.add_dialog_turn(query, answer_text)
+                yield answer_text
+
+        except Exception as e:
+            logger.error(f"Error in RAG streaming call: {str(e)}")
+            error_msg = f"I apologize, but I encountered an error while processing your question: {str(e)}"
+            yield error_msg

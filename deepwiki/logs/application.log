@@ -1,0 +1,82 @@
+2025-06-21 10:28:08,251 - INFO - deepwiki.config - config.py:94 - Loading configuration from /Users/emre/ossca/deepwiki/config/generator.json
+2025-06-21 10:28:08,251 - WARNING - deepwiki.config - config.py:97 - Configuration file /Users/emre/ossca/deepwiki/config/generator.json does not exist
+2025-06-21 10:28:08,251 - INFO - deepwiki.config - config.py:94 - Loading configuration from /Users/emre/ossca/deepwiki/config/embedder.json
+2025-06-21 10:28:08,251 - WARNING - deepwiki.config - config.py:97 - Configuration file /Users/emre/ossca/deepwiki/config/embedder.json does not exist
+2025-06-21 10:28:08,251 - INFO - deepwiki.config - config.py:94 - Loading configuration from /Users/emre/ossca/deepwiki/config/repo.json
+2025-06-21 10:28:08,251 - WARNING - deepwiki.config - config.py:97 - Configuration file /Users/emre/ossca/deepwiki/config/repo.json does not exist
+2025-06-21 10:28:08,263 - INFO - faiss.loader - loader.py:148 - Loading faiss.
+2025-06-21 10:28:08,619 - INFO - faiss.loader - loader.py:150 - Successfully loaded faiss.
+2025-06-21 10:28:08,631 - INFO - faiss - __init__.py:174 - Failed to load GPU Faiss: name 'GpuIndexIVFFlat' is not defined. Will not load constructor refs for GPU indexes. This is only an error if you're trying to use GPU Faiss.
+2025-06-21 10:28:09,283 - INFO - deepwiki.config - config.py:94 - Loading configuration from /Users/emre/ossca/deepwiki/config/generator.json
+2025-06-21 10:28:09,284 - WARNING - deepwiki.config - config.py:97 - Configuration file /Users/emre/ossca/deepwiki/config/generator.json does not exist
+2025-06-21 10:28:09,284 - INFO - deepwiki.config - config.py:94 - Loading configuration from /Users/emre/ossca/deepwiki/config/embedder.json
+2025-06-21 10:28:09,284 - WARNING - deepwiki.config - config.py:97 - Configuration file /Users/emre/ossca/deepwiki/config/embedder.json does not exist
+2025-06-21 10:28:09,284 - INFO - deepwiki.config - config.py:94 - Loading configuration from /Users/emre/ossca/deepwiki/config/repo.json
+2025-06-21 10:28:09,284 - WARNING - deepwiki.config - config.py:97 - Configuration file /Users/emre/ossca/deepwiki/config/repo.json does not exist
+2025-06-21 10:28:09,285 - INFO - faiss.loader - loader.py:148 - Loading faiss.
+2025-06-21 10:28:09,292 - INFO - faiss.loader - loader.py:150 - Successfully loaded faiss.
+2025-06-21 10:28:09,294 - INFO - faiss - __init__.py:174 - Failed to load GPU Faiss: name 'GpuIndexIVFFlat' is not defined. Will not load constructor refs for GPU indexes. This is only an error if you're trying to use GPU Faiss.
+2025-06-21 10:28:09,904 - INFO - deepwiki.config - config.py:94 - Loading configuration from /Users/emre/ossca/deepwiki/config/generator.json
+2025-06-21 10:28:09,904 - WARNING - deepwiki.config - config.py:97 - Configuration file /Users/emre/ossca/deepwiki/config/generator.json does not exist
+2025-06-21 10:28:09,904 - INFO - deepwiki.config - config.py:94 - Loading configuration from /Users/emre/ossca/deepwiki/config/embedder.json
+2025-06-21 10:28:09,904 - WARNING - deepwiki.config - config.py:97 - Configuration file /Users/emre/ossca/deepwiki/config/embedder.json does not exist
+2025-06-21 10:28:09,904 - INFO - deepwiki.config - config.py:94 - Loading configuration from /Users/emre/ossca/deepwiki/config/repo.json
+2025-06-21 10:28:09,904 - WARNING - deepwiki.config - config.py:97 - Configuration file /Users/emre/ossca/deepwiki/config/repo.json does not exist
+2025-06-21 10:28:09,906 - INFO - faiss.loader - loader.py:148 - Loading faiss.
+2025-06-21 10:28:09,913 - INFO - faiss.loader - loader.py:150 - Successfully loaded faiss.
+2025-06-21 10:28:09,915 - INFO - faiss - __init__.py:174 - Failed to load GPU Faiss: name 'GpuIndexIVFFlat' is not defined. Will not load constructor refs for GPU indexes. This is only an error if you're trying to use GPU Faiss.
+2025-06-21 10:28:19,649 - INFO - deepwiki.config - config.py:94 - Loading configuration from /Users/emre/ossca/test/../deepwiki/config/generator.json
+2025-06-21 10:28:19,649 - WARNING - deepwiki.config - config.py:97 - Configuration file /Users/emre/ossca/test/../deepwiki/config/generator.json does not exist
+2025-06-21 10:28:19,649 - INFO - deepwiki.config - config.py:94 - Loading configuration from /Users/emre/ossca/test/../deepwiki/config/embedder.json
+2025-06-21 10:28:19,649 - WARNING - deepwiki.config - config.py:97 - Configuration file /Users/emre/ossca/test/../deepwiki/config/embedder.json does not exist
+2025-06-21 10:28:19,649 - INFO - deepwiki.config - config.py:94 - Loading configuration from /Users/emre/ossca/test/../deepwiki/config/repo.json
+2025-06-21 10:28:19,649 - WARNING - deepwiki.config - config.py:97 - Configuration file /Users/emre/ossca/test/../deepwiki/config/repo.json does not exist
+2025-06-21 10:28:19,651 - INFO - faiss.loader - loader.py:148 - Loading faiss.
+2025-06-21 10:28:19,658 - INFO - faiss.loader - loader.py:150 - Successfully loaded faiss.
+2025-06-21 10:28:19,660 - INFO - faiss - __init__.py:174 - Failed to load GPU Faiss: name 'GpuIndexIVFFlat' is not defined. Will not load constructor refs for GPU indexes. This is only an error if you're trying to use GPU Faiss.
+2025-06-21 10:28:21,567 - INFO - deepwiki.config - config.py:94 - Loading configuration from /Users/emre/ossca/deepwiki/config/generator.json
+2025-06-21 10:28:21,567 - WARNING - deepwiki.config - config.py:97 - Configuration file /Users/emre/ossca/deepwiki/config/generator.json does not exist
+2025-06-21 10:28:21,567 - INFO - deepwiki.config - config.py:94 - Loading configuration from /Users/emre/ossca/deepwiki/config/embedder.json
+2025-06-21 10:28:21,567 - WARNING - deepwiki.config - config.py:97 - Configuration file /Users/emre/ossca/deepwiki/config/embedder.json does not exist
+2025-06-21 10:28:21,567 - INFO - deepwiki.config - config.py:94 - Loading configuration from /Users/emre/ossca/deepwiki/config/repo.json
+2025-06-21 10:28:21,567 - WARNING - deepwiki.config - config.py:97 - Configuration file /Users/emre/ossca/deepwiki/config/repo.json does not exist
+2025-06-21 10:28:21,569 - INFO - faiss.loader - loader.py:148 - Loading faiss.
+2025-06-21 10:28:21,577 - INFO - faiss.loader - loader.py:150 - Successfully loaded faiss.
+2025-06-21 10:28:21,578 - INFO - faiss - __init__.py:174 - Failed to load GPU Faiss: name 'GpuIndexIVFFlat' is not defined. Will not load constructor refs for GPU indexes. This is only an error if you're trying to use GPU Faiss.
+2025-06-21 10:28:52,041 - INFO - deepwiki.config - config.py:94 - Loading configuration from /Users/emre/ossca/deepwiki/config/generator.json
+2025-06-21 10:28:52,041 - INFO - deepwiki.config - config.py:94 - Loading configuration from /Users/emre/ossca/deepwiki/config/embedder.json
+2025-06-21 10:28:52,041 - INFO - deepwiki.config - config.py:94 - Loading configuration from /Users/emre/ossca/deepwiki/config/repo.json
+2025-06-21 10:28:52,044 - INFO - faiss.loader - loader.py:148 - Loading faiss.
+2025-06-21 10:28:52,064 - INFO - faiss.loader - loader.py:150 - Successfully loaded faiss.
+2025-06-21 10:28:52,067 - INFO - faiss - __init__.py:174 - Failed to load GPU Faiss: name 'GpuIndexIVFFlat' is not defined. Will not load constructor refs for GPU indexes. This is only an error if you're trying to use GPU Faiss.
+2025-06-21 10:28:53,488 - INFO - deepwiki.config - config.py:94 - Loading configuration from /Users/emre/ossca/test/../deepwiki/config/generator.json
+2025-06-21 10:28:53,489 - INFO - deepwiki.config - config.py:94 - Loading configuration from /Users/emre/ossca/test/../deepwiki/config/embedder.json
+2025-06-21 10:28:53,489 - INFO - deepwiki.config - config.py:94 - Loading configuration from /Users/emre/ossca/test/../deepwiki/config/repo.json
+2025-06-21 10:28:53,491 - INFO - faiss.loader - loader.py:148 - Loading faiss.
+2025-06-21 10:28:53,498 - INFO - faiss.loader - loader.py:150 - Successfully loaded faiss.
+2025-06-21 10:28:53,500 - INFO - faiss - __init__.py:174 - Failed to load GPU Faiss: name 'GpuIndexIVFFlat' is not defined. Will not load constructor refs for GPU indexes. This is only an error if you're trying to use GPU Faiss.
+2025-06-21 10:28:55,884 - INFO - deepwiki.config - config.py:94 - Loading configuration from /Users/emre/ossca/deepwiki/config/generator.json
+2025-06-21 10:28:55,884 - INFO - deepwiki.config - config.py:94 - Loading configuration from /Users/emre/ossca/deepwiki/config/embedder.json
+2025-06-21 10:28:55,885 - INFO - deepwiki.config - config.py:94 - Loading configuration from /Users/emre/ossca/deepwiki/config/repo.json
+2025-06-21 10:28:55,886 - INFO - faiss.loader - loader.py:148 - Loading faiss.
+2025-06-21 10:28:55,895 - INFO - faiss.loader - loader.py:150 - Successfully loaded faiss.
+2025-06-21 10:28:55,896 - INFO - faiss - __init__.py:174 - Failed to load GPU Faiss: name 'GpuIndexIVFFlat' is not defined. Will not load constructor refs for GPU indexes. This is only an error if you're trying to use GPU Faiss.
+2025-06-21 10:28:55,898 - WARNING - deepwiki.database_versioning - database_versioning.py:63 - Loading database without version information from /var/folders/mv/x0v4nywd3lndq8dh6t_ytfjr0000gn/T/tmpwr9cb9on.pkl
+2025-06-21 10:29:20,243 - INFO - deepwiki.config - config.py:94 - Loading configuration from /Users/emre/ossca/deepwiki/config/generator.json
+2025-06-21 10:29:20,243 - INFO - deepwiki.config - config.py:94 - Loading configuration from /Users/emre/ossca/deepwiki/config/embedder.json
+2025-06-21 10:29:20,243 - INFO - deepwiki.config - config.py:94 - Loading configuration from /Users/emre/ossca/deepwiki/config/repo.json
+2025-06-21 10:29:20,245 - INFO - faiss.loader - loader.py:148 - Loading faiss.
+2025-06-21 10:29:20,253 - INFO - faiss.loader - loader.py:150 - Successfully loaded faiss.
+2025-06-21 10:29:20,255 - INFO - faiss - __init__.py:174 - Failed to load GPU Faiss: name 'GpuIndexIVFFlat' is not defined. Will not load constructor refs for GPU indexes. This is only an error if you're trying to use GPU Faiss.
+2025-06-21 10:32:43,112 - INFO - faiss.loader - loader.py:148 - Loading faiss.
+2025-06-21 10:32:43,128 - INFO - faiss.loader - loader.py:150 - Successfully loaded faiss.
+2025-06-21 10:32:43,130 - INFO - faiss - __init__.py:174 - Failed to load GPU Faiss: name 'GpuIndexIVFFlat' is not defined. Will not load constructor refs for GPU indexes. This is only an error if you're trying to use GPU Faiss.
+2025-06-21 10:32:53,874 - INFO - faiss.loader - loader.py:148 - Loading faiss.
+2025-06-21 10:32:53,881 - INFO - faiss.loader - loader.py:150 - Successfully loaded faiss.
+2025-06-21 10:32:53,883 - INFO - faiss - __init__.py:174 - Failed to load GPU Faiss: name 'GpuIndexIVFFlat' is not defined. Will not load constructor refs for GPU indexes. This is only an error if you're trying to use GPU Faiss.
+2025-06-21 10:33:03,658 - INFO - faiss.loader - loader.py:148 - Loading faiss.
+2025-06-21 10:33:03,664 - INFO - faiss.loader - loader.py:150 - Successfully loaded faiss.
+2025-06-21 10:33:03,666 - INFO - faiss - __init__.py:174 - Failed to load GPU Faiss: name 'GpuIndexIVFFlat' is not defined. Will not load constructor refs for GPU indexes. This is only an error if you're trying to use GPU Faiss.
+2025-06-21 10:33:12,753 - INFO - faiss.loader - loader.py:148 - Loading faiss.
+2025-06-21 10:33:12,760 - INFO - faiss.loader - loader.py:150 - Successfully loaded faiss.
+2025-06-21 10:33:12,762 - INFO - faiss - __init__.py:174 - Failed to load GPU Faiss: name 'GpuIndexIVFFlat' is not defined. Will not load constructor refs for GPU indexes. This is only an error if you're trying to use GPU Faiss.

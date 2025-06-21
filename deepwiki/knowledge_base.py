@@ -256,4 +256,26 @@ class KnowledgeBase:
     def clear_conversation(self):
         """Clear the conversation history."""
         if self.is_ready:
-            self.rag.memory = self.rag.memory.__class__() 
+            self.rag.memory = self.rag.memory.__class__()
+    
+    def query_stream(self, question: str, language: str = "en"):
+        """
+        Query the knowledge base with a question and stream the response.
+        
+        Args:
+            question: The question to ask
+            language: Language for the response (default: "en")
+            
+        Yields:
+            Response chunks as they are generated
+        """
+        if not self.is_ready:
+            raise RuntimeError("Knowledge base is not ready. Call build() or load() first.")
+            
+        try:
+            for chunk in self.rag.call_stream(question, language):
+                yield chunk
+                
+        except Exception as e:
+            logger.error(f"Error during streaming query: {str(e)}")
+            yield f"I apologize, but I encountered an error: {str(e)}" 

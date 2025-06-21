@@ -3,11 +3,12 @@ import os
 from pathlib import Path
 
 
-def setup_logging(format: str = None):
+def setup_logging(level: int = logging.INFO):
     """
     Configure logging for the application.
-    Reads LOG_LEVEL and LOG_FILE_PATH from environment (defaults: INFO, logs/application.log).
-    Ensures log directory exists, and configures both file and console handlers.
+    
+    Args:
+        level: Logging level (e.g., logging.DEBUG, logging.INFO, logging.WARNING)
     """
     # Determine log directory and default file path
     base_dir = Path(__file__).parent
@@ -15,11 +16,12 @@ def setup_logging(format: str = None):
     log_dir.mkdir(parents=True, exist_ok=True)
     default_log_file = log_dir / "application.log"
 
-    # Get log level and file path from environment
-    log_level_str = os.environ.get("LOG_LEVEL", "INFO").upper()
-    log_level = getattr(logging, log_level_str, logging.INFO)
-    log_file_path = Path(os.environ.get(
-        "LOG_FILE_PATH", str(default_log_file)))
+    # Get log level and file path from environment (with fallback to parameter)
+    log_level_str = os.environ.get("LOG_LEVEL", "").upper()
+    if log_level_str:
+        level = getattr(logging, log_level_str, level)
+    
+    log_file_path = Path(os.environ.get("LOG_FILE_PATH", str(default_log_file)))
 
     # ensure log_file_path is within the project's logs directory to prevent path traversal
     log_dir_resolved = log_dir.resolve()
@@ -33,8 +35,8 @@ def setup_logging(format: str = None):
 
     # Configure logging handlers and format
     logging.basicConfig(
-        level=log_level,
-        format = format or "%(asctime)s - %(levelname)s - %(name)s - %(filename)s:%(lineno)d - %(message)s",
+        level=level,
+        format="%(asctime)s - %(levelname)s - %(name)s - %(filename)s:%(lineno)d - %(message)s",
         handlers=[
             logging.FileHandler(resolved_path),
             logging.StreamHandler()
@@ -44,4 +46,4 @@ def setup_logging(format: str = None):
 
     # Initial debug message to confirm configuration
     logger = logging.getLogger(__name__)
-    logger.debug(f"Log level set to {log_level_str}, log file: {resolved_path}")
+    logger.debug(f"Log level set to {logging.getLevelName(level)}, log file: {resolved_path}")

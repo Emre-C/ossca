@@ -44,7 +44,7 @@ class OpenRouterClient(ModelClient):
 
     def init_sync_client(self):
         """Initialize the synchronous OpenRouter client."""
-        from api.config import OPENROUTER_API_KEY
+        from deepwiki.config import OPENROUTER_API_KEY
         api_key = OPENROUTER_API_KEY
         if not api_key:
             log.warning("OPENROUTER_API_KEY not configured")
@@ -57,7 +57,7 @@ class OpenRouterClient(ModelClient):
 
     def init_async_client(self):
         """Initialize the asynchronous OpenRouter client."""
-        from api.config import OPENROUTER_API_KEY
+        from deepwiki.config import OPENROUTER_API_KEY
         api_key = OPENROUTER_API_KEY
         if not api_key:
             log.warning("OPENROUTER_API_KEY not configured")

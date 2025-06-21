@@ -6,7 +6,7 @@ from uuid import uuid4
 
 import adalflow as adal
 
-from api.tools.embedder import get_embedder
+from deepwiki.tools.embedder import get_embedder
 
 
 # Create our own implementation of the conversation classes
@@ -24,6 +24,22 @@ class DialogTurn:
     user_query: UserQuery
     assistant_response: AssistantResponse
 
+def get_embedder() -> adal.Embedder:
+    embedder_config = configs["embedder"]
+
+    # --- Initialize Embedder ---
+    model_client_class = embedder_config["model_client"]
+    if "initialize_kwargs" in embedder_config:
+        model_client = model_client_class(**embedder_config["initialize_kwargs"])
+    else:
+        model_client = model_client_class()
+    embedder = adal.Embedder(
+        model_client=model_client,
+        model_kwargs=embedder_config["model_kwargs"],
+    )
+    return embedder
+
+
 class CustomConversation:
     """Custom implementation of Conversation to fix the list assignment index out of range error"""
 
@@ -38,8 +54,8 @@ class CustomConversation:
 
 # Import other adalflow components
 from adalflow.components.retriever.faiss_retriever import FAISSRetriever
-from api.config import configs
-from api.data_pipeline import DatabaseManager
+from deepwiki.config import configs
+from deepwiki.data_pipeline import DatabaseManager
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -222,7 +238,7 @@ class RAG(adal.Component):
         self.model = model
 
         # Import the helper functions
-        from api.config import get_embedder_config, is_ollama_embedder
+        from deepwiki.config import get_embedder_config, is_ollama_embedder
 
         # Determine if we're using Ollama embedder based on configuration
         self.is_ollama_embedder = is_ollama_embedder()
@@ -263,7 +279,7 @@ IMPORTANT FORMATTING RULES:
 9. For pipe characters (|) in text, write them directly without escaping them"""
 
         # Get model configuration based on provider and model
-        from api.config import get_model_config
+        from deepwiki.config import get_model_config
         generator_config = get_model_config(self.provider, self.model)
 
         # Set up the main generator

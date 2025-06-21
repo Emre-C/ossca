@@ -11,13 +11,13 @@ import re
 import glob
 from adalflow.utils import get_adalflow_default_root_path
 from adalflow.core.db import LocalDB
-from api.config import configs, DEFAULT_EXCLUDED_DIRS, DEFAULT_EXCLUDED_FILES
-from api.ollama_patch import OllamaDocumentProcessor
+from deepwiki.config import configs, DEFAULT_EXCLUDED_DIRS, DEFAULT_EXCLUDED_FILES
+from deepwiki.ollama_patch import OllamaDocumentProcessor
 from urllib.parse import urlparse, urlunparse, quote
 import requests
 from requests.exceptions import RequestException
 
-from api.tools.embedder import get_embedder
+from deepwiki.tools.embedder import get_embedder
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -40,7 +40,7 @@ def count_tokens(text: str, is_ollama_embedder: bool = None) -> int:
     try:
         # Determine if using Ollama embedder if not specified
         if is_ollama_embedder is None:
-            from api.config import is_ollama_embedder as check_ollama
+            from deepwiki.config import is_ollama_embedder as check_ollama
             is_ollama_embedder = check_ollama()
 
         if is_ollama_embedder:
@@ -361,7 +361,7 @@ def prepare_data_pipeline(is_ollama_embedder: bool = None):
     Returns:
         adal.Sequential: The data transformation pipeline
     """
-    from api.config import get_embedder_config, is_ollama_embedder as check_ollama
+    from deepwiki.config import get_embedder_config, is_ollama_embedder as check_ollama
 
     # Determine if using Ollama embedder if not specified
     if is_ollama_embedder is None:

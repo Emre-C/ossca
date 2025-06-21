@@ -12,7 +12,7 @@ from adalflow.core.model_client import ModelClient
 from adalflow.core.types import ModelType, GeneratorOutput
 
 # Configure logging
-from api.logging_config import setup_logging
+from deepwiki.logging_config import setup_logging
 
 setup_logging()
 log = logging.getLogger(__name__)
@@ -53,7 +53,7 @@ class BedrockClient(ModelClient):
             aws_role_arn: AWS IAM role ARN for role-based authentication. If not provided, will use environment variable AWS_ROLE_ARN.
         """
         super().__init__(*args, **kwargs)
-        from api.config import AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION, AWS_ROLE_ARN
+        from deepwiki.config import AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_REGION, AWS_ROLE_ARN
 
         self.aws_access_key_id = aws_access_key_id or AWS_ACCESS_KEY_ID
         self.aws_secret_access_key = aws_secret_access_key or AWS_SECRET_ACCESS_KEY

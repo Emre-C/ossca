@@ -1,7 +1,7 @@
 [project]
-name = "deepwiki-open"
+name = "ossca"
 version = "0.1.0"
-description = "Add your description here"
+description = "open source software - community assistant"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
